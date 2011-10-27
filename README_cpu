@@ -1,0 +1,60 @@
+/*************************************************************************/
+/* Depth upsampling from sparse data                                     */
+/*                                                                       */
+/* (If you use this code, please cite the papers below:)                 */
+/*                                                                       */
+/* For the paper, please see:                                            */
+/*  Dolson, J., Baek, J., Plagmann, C. and Thrun, S.,                    */
+/*   ``Upsampling Range Data in Dynamic Environments,'' In CVPR 2010.    */
+/*                                                                       */
+/* This is an adaptation of the gaussian kd-tree filtering               */
+/* algorithm by Adams, A., Gelfand, N., Dolson, J., and Levoy, M.        */
+/*  ``Gaussian KD-Trees for Fast High-Dimensional Filtering''            */
+/*   In SIGGRAPH 2009.                                                   */
+/*                                                                       */
+/*                                                                       */
+/*                                                                       */
+/* All rights reserved.                                                  */
+/*************************************************************************/
+
+1. NOTES
+
+1.1. File format 
+
+We use the ".tmp" file format. A ".tmp" file begins 
+with a header describing the image size (see the Load function), followed by a 
+floating-point array of size [width*height*channels*frame]. The sample datasets 
+are ordered by row, then column, then channel, and the channels 
+are as follows: (r,g,b,t,d). 
+ 
+
+1.2. Kernel 
+
+The Gaussian standard deviations set to 1 in the Gaussian KD-tree data structure. Non-unit standard 
+deviations are encoded by pre-multiplying points to change their spatial relationships. For more information, 
+see the Gaussian KD-tree paper. 
+
+
+1.3. Sparsity of data
+
+We assume that the data you are loading can fit into main memory. 
+Violating this will cause a segmentation fault. 
+If you have a synthetic dataset, set all but X percent of the depth values 
+to zero in order to simulate sparse input.
+
+
+1.4. Sample usage
+
+./gkdtree_based output.tmp ~/data/slice_image.tmp ~/data/*.tmp
+
+The above example will write the output file in output.tmp, 
+will query based on the (r,g,b) values of slice.tmp, and build the 
+filtering data structure using all the (r,g,b,depth,time) data in the .tmp files in ~/data
+
+
+1.5 Viewing your files
+
+Our ".tmp" file format is associated with ImageStack, an open-source image processing library (see http://imagestack.googlecode.com/ ). One could easily load this file using ImageStack (double check to make sure the image header in the Save function is correct--you might have to change it), and this would enable use of ImageStack's built-in viewer, as well as other features to visualize and interpret your data. 
+ 
+
+
