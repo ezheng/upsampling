@@ -1,6 +1,6 @@
-function readTMP(fileName)
+function data = readTMP(fileName)
 
-fileName = 'output.tmp';
+% fileName = 'output.tmp';
 % fileName = 'highway2_seq1--1254417902.055041.tmp';
 fid = fopen(fileName);
 assert(fid>0);
@@ -10,8 +10,8 @@ height = fread(fid, 1, 'int');
 channel = fread(fid, 1, 'int');
 
 datasize = height*width*channel;
-% data = zeros(datasize,1);
-data = fread(fid, inf, 'float'); assert(numel(data) == datasize);
+data = fread(fid, inf, 'float'); 
+assert(numel(data) == datasize);
 data = reorderData(data, width, height, channel);
 
 % figure(1);
